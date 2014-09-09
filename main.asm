@@ -13,7 +13,7 @@
                                             ; that have references to current
                                             ; section
 ;Enter calculator instructions here
-ops:	.byte	0x14, 0x11, 0x12, 0x55
+ops:	.byte	0x22, 0x22, 0x01, 0x55
 
 fOp:	.equ	r5	;register for the first number
 sOp:	.equ	r6	;register for the second number
@@ -31,7 +31,7 @@ StopWDT     mov.w   #WDTPW|WDTHOLD,&WDTCTL  ; Stop watchdog timer
                                             ; Main loop here
 ;-------------------------------------------------------------------------------
 
-		mov.b	#ops, point	;point first op at string of numbers
+		mov		#ops, point	;point first op at string of numbers
 		mov		#0x200, mem	;starting locaiton for memroy
 
 cleared	mov.b	@point+, fOp ;fOp = value at point
@@ -58,11 +58,13 @@ chkSub	sub.b	fOp, sOp
 end		jmp		end	;infinite loop
 
 ;submethods
-clear	jmp		cleared	;resume program
+clear	mov.b	#0x00, mem	;store a zero in memory
+		inc 	mem
+		jmp		cleared	;resume program with fresh number
 
-store	mov.b	sOp, mem	;store result in memory
+store	mov.b	sOp, 0(mem)	;store result in memory
 		inc		mem
-		jmp		again	;resume program with opcode
+		jmp		again		;resume program with opcode
 
 ;-------------------------------------------------------------------------------
 ;           Stack Pointer definition
