@@ -13,7 +13,7 @@
                                             ; that have references to current
                                             ; section
 ;Enter calculator instructions here
-ops:	.byte	0x14, 0x11, 0x12, 0x44, 0x22, 0x22, 0x01, 0x55
+ops:	.byte	0xFE, 0x11, 0x12, 0x44, 0x02, 0x22, 0x11, 0x55
 
 fOp:	.equ	r5	;register for the first number
 sOp:	.equ	r6	;register for the second number
@@ -69,9 +69,17 @@ clear	mov.b	#0x00, 0(mem);store a zero in memory
 		inc 	mem
 		jmp		cleared		;resume program with fresh number
 
-store	mov.b	res, 0(mem)	;store result in memory
+store	jc		over		;overflow
+		jn		under		;negative
+rStore	mov.b	res, 0(mem)	;store result in memory
 		inc		mem
 		jmp		again		;resume program with opcode
+
+over	mov.b	#255, res	;default to max value
+		jmp		rStore		;resume storage
+
+under	mov.b	#0, res		;default to zero
+		jmp		rStore
 
 ;-------------------------------------------------------------------------------
 ;           Stack Pointer definition
