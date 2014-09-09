@@ -12,16 +12,15 @@
             .retainrefs                     ; Additionally retain any sections
                                             ; that have references to current
                                             ; section
+;Enter calculator instructions here
+ops:	.byte	0x14, 0x11, 0x12, 0x55
 
 fOp:	.equ	r5	;register for the first number
 sOp:	.equ	r6	;register for the second number
 tsk:	.equ	r7	;register for the instruction to be interested
 
-	.text	;get ready to write to ROM
 ;--------------------------------------------------------------------------------
- ;Enter calculator instructions here
- ops:	.byte
- 		0x14, 0x11, 0x12, 0x55
+
 ;-------------------------------------------------------------------------------
 RESET       mov.w   #__STACK_END,SP         ; Initialize stackpointer
 StopWDT     mov.w   #WDTPW|WDTHOLD,&WDTCTL  ; Stop watchdog timer
