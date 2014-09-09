@@ -13,13 +13,14 @@
                                             ; that have references to current
                                             ; section
 ;Enter calculator instructions here
-ops:	.byte	0x22, 0x22, 0x01, 0x55
+ops:	.byte	0x14, 0x11, 0x12, 0x44, 0x22, 0x22, 0x01, 0x55
 
 fOp:	.equ	r5	;register for the first number
 sOp:	.equ	r6	;register for the second number
 tsk:	.equ	r7	;register for the instruction
-point:	.equ	r8	;register for pointer
-mem:	.equ	r9	;register for memory location
+res:	.equ	r8	;register for the result
+point:	.equ	r9	;register for pointer
+mem:	.equ	r10	;register for memory location
 
 ;--------------------------------------------------------------------------------
 
@@ -46,23 +47,29 @@ chkClr	cmp.b	#0x44, tsk	;check for clear command
 
 		mov.b	@point+, sOp	;load the second operand into register
 
-chkAdd	cmp.b	#0x11, tsk	;compare the opperand
+chkAdd	cmp.b	#0x11, tsk	;check if operation is add
 		jnz		chkSub		;jump if not add
 		add.b	fOp, sOp	;numbers are added
+		mov.b	sOp, res
 		jmp		store		;store sum
 
-chkSub	sub.b	fOp, sOp
+chkSub	cmp.b	#0x22, tsk	;check if opperation is subtract
+		jnz		mult
+		mov.b	fOp, res	;subtract
+		sub.b	sOp, res
 		jmp 	store		;store difference
+
+mult	jmp		mult
 
 
 end		jmp		end	;infinite loop
 
 ;submethods
-clear	mov.b	#0x00, mem	;store a zero in memory
+clear	mov.b	#0x00, 0(mem);store a zero in memory
 		inc 	mem
-		jmp		cleared	;resume program with fresh number
+		jmp		cleared		;resume program with fresh number
 
-store	mov.b	sOp, 0(mem)	;store result in memory
+store	mov.b	res, 0(mem)	;store result in memory
 		inc		mem
 		jmp		again		;resume program with opcode
 
