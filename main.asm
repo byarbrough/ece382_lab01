@@ -13,7 +13,7 @@
                                             ; that have references to current
                                             ; section
 ;Enter calculator instructions here
-ops:	.byte	0x5A, 0x11, 0x12, 0x44, 0xA2, 0x22, 0x11, 0x55
+ops:	.byte	0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0x11, 0xDD, 0x44, 0x08, 0x22, 0x09, 0x44, 0xFF, 0x22, 0xFD, 0x55
 
 fOp:	.equ	r5	;register for the first number
 sOp:	.equ	r6	;register for the second number
@@ -56,23 +56,20 @@ chkAdd	cmp.b	#0x11, tsk	;check if operation is add
 
 chkSub	cmp.b	#0x22, tsk	;check if opperation is subtract
 		jnz		mult
-		cmp.b	fOp, sOp	;check if subtraction will produce a negative
+		cmp.b	sOp, fOp	;check if subtraction will produce a negative
 		jl		under
 		mov.b	fOp, res	;otherwise, subtract
 		sub.b	sOp, res
 		jmp 	store		;store difference
 
-mult	bit.b 	#1, sOp		;is the multiplier odd
-		jz		times		;no, is even
-		mov.b	fOp, res
-		dec		sOp			;the first multiplication
-times	cmp.b	sOp
-		jz		dunMult		;jump if done multiplying
-		rla.b				;multiply by two
-		jmp		times		;next iteration
-
-dunMult	add.b	sOp, res
-		jmp		store
+mult	jmp		end		;bit.b 	#1, sOp		;is the multiplier odd
+;		jz		times		;no, is even
+;		mov.b	fOp, res
+;		dec		sOp			;the first multiplication
+;times	cmp.b	sOp
+;		jz		doneMult	;jump if done multiplying
+;		rla.b
+;		jmp		times		;next iteration
 
 
 end		jmp		end	;infinite loop
@@ -84,6 +81,7 @@ clear	mov.b	#0x00, 0(mem);store a zero in memory
 
 store	mov.b	res, 0(mem)	;store result in memory
 		inc		mem
+		mov.b	res, fOp	;load for next operaiton
 		jmp		again		;resume program with opcode
 
 over	mov.b	#255, res	;default to max value
