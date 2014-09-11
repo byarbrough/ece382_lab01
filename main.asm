@@ -51,11 +51,14 @@ chkAdd	cmp.b	#0x11, tsk	;check if operation is add
 		jnz		chkSub		;jump if not add
 		add.b	fOp, sOp	;numbers are added
 		mov.b	sOp, res
+		jc		over		;overflow
 		jmp		store		;store sum
 
 chkSub	cmp.b	#0x22, tsk	;check if opperation is subtract
 		jnz		mult
-		mov.b	fOp, res	;subtract
+		cmp.b	fOp, sOp	;check if subtraction will produce a negative
+		jl		under
+		mov.b	fOp, res	;otherwise, subtract
 		sub.b	sOp, res
 		jmp 	store		;store difference
 
@@ -69,17 +72,15 @@ clear	mov.b	#0x00, 0(mem);store a zero in memory
 		inc 	mem
 		jmp		cleared		;resume program with fresh number
 
-store	jc		over		;overflow
-		jn		under		;negative
-rStore	mov.b	res, 0(mem)	;store result in memory
+store	mov.b	res, 0(mem)	;store result in memory
 		inc		mem
 		jmp		again		;resume program with opcode
 
 over	mov.b	#255, res	;default to max value
-		jmp		rStore		;resume storage
+		jmp		store		;resume storage
 
 under	mov.b	#0, res		;default to zero
-		jmp		rStore
+		jmp		store
 
 ;-------------------------------------------------------------------------------
 ;           Stack Pointer definition
