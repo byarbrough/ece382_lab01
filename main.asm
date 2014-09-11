@@ -69,7 +69,6 @@ nextBit	clrc
 
 dunPlus	clrc
 		rlc.b	fOp			;multiply fOp by 2
-		jc		over		;ther was overflow
 		tst.b	fOp
 		jz		store
 		tst.b	sOp
@@ -77,6 +76,7 @@ dunPlus	clrc
 		jmp		nextBit
 
 plus	add.b	fOp, res
+		jge		#0xFF		;ther was overflow
 		jmp		dunPlus
 
 ;submethods
