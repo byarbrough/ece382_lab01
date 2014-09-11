@@ -13,7 +13,7 @@
                                             ; that have references to current
                                             ; section
 ;Enter calculator instructions here
-ops:	.byte	0xFE, 0x11, 0x12, 0x44, 0x02, 0x22, 0x11, 0x55
+ops:	.byte	0x5A, 0x11, 0x12, 0x44, 0xA2, 0x22, 0x11, 0x55
 
 fOp:	.equ	r5	;register for the first number
 sOp:	.equ	r6	;register for the second number
