@@ -62,17 +62,22 @@ chkSub	cmp.b	#0x22, tsk	;check if opperation is subtract
 		sub.b	sOp, res
 		jmp 	store		;store difference
 
-mult	jmp		end		;bit.b 	#1, sOp		;is the multiplier odd
-;		jz		times		;no, is even
-;		mov.b	fOp, res
-;		dec		sOp			;the first multiplication
-;times	cmp.b	sOp
-;		jz		doneMult	;jump if done multiplying
-;		rla.b
-;		jmp		times		;next iteration
+mult	clr.b	res			;clear result
+nextBit	clrc
+		rrc.b	sOp			;load the LSB of the sOP into c
+		jc		plus		;if LSB was 1, add it
 
+dunPlus	clrc
+		rlc.b	fOp			;multiply fOp by 2
+		jc		over		;ther was overflow
+		tst.b	fOp
+		jz		store
+		tst.b	sOp
+		jz 		store		;if either number is zero, finished
+		jmp		nextBit
 
-end		jmp		end	;infinite loop
+plus	add.b	fOp, res
+		jmp		dunPlus
 
 ;submethods
 clear	mov.b	#0x00, 0(mem);store a zero in memory
@@ -89,6 +94,8 @@ over	mov.b	#255, res	;default to max value
 
 under	mov.b	#0, res		;default to zero
 		jmp		store
+
+end		jmp		end	;infinite loop
 
 ;-------------------------------------------------------------------------------
 ;           Stack Pointer definition
