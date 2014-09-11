@@ -62,7 +62,17 @@ chkSub	cmp.b	#0x22, tsk	;check if opperation is subtract
 		sub.b	sOp, res
 		jmp 	store		;store difference
 
-mult	jmp		mult
+mult	bit.b 	#1, sOp		;is the multiplier odd
+		jz		times		;no, is even
+		mov.b	fOp, res
+		dec		sOp			;the first multiplication
+times	cmp.b	sOp
+		jz		dunMult		;jump if done multiplying
+		rla.b				;multiply by two
+		jmp		times		;next iteration
+
+dunMult	add.b	sOp, res
+		jmp		store
 
 
 end		jmp		end	;infinite loop
