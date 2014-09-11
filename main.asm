@@ -67,16 +67,17 @@ nextBit	clrc
 		rrc.b	sOp			;load the LSB of the sOP into c
 		jc		plus		;if LSB was 1, add it
 
-dunPlus	clrc
+dunPlus	tst.b	sOp
+		jz 		store		;done multiplying
+		clrc
 		rlc.b	fOp			;multiply fOp by 2
+		jc		over		;handle overflow
 		tst.b	fOp
 		jz		store
-		tst.b	sOp
-		jz 		store		;if either number is zero, finished
+			;if either number is zero, finished
 		jmp		nextBit
 
 plus	add.b	fOp, res
-		jge		#0xFF		;ther was overflow
 		jmp		dunPlus
 
 ;submethods
