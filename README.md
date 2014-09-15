@@ -21,3 +21,19 @@ _Rethought Flowchart_
 ###Hardware
 Hardware in this lab was relatively straightforward. The only two concerns on the MSP430 were ROM and RAM limitations. Because there is much more ROM on the chip than RAM, the user must be sure to not enter more values than there is space in RAM to store results from. Doing this would cause an overflow into other zones of the chip and would likely cause huge problems.
 
+Also, it is important to note that the calculator only handles bytes. This means that the numbers must be positive integers ranging from 0-255 (0x00-0xFF)
+
+###Code
+Please see main.asm for code.
+
+The code is organized into four segments:
+1. Setup the calculator
+2. Check for end or clear (and jump appropriately)
+3. Check for add, subtract, or multiply (and perform appropriate action)
+4. Submethods for storing, clearing, and handling overflow
+
+I likely could have accomplished this project with fewer lines of code or more effeciently processor wise, but considering the resources available on the chip, I chose this method. Although I do use six registers (which is likely more than necesary) I think that my method prevents misinterpretation of numbers and safeguards agains overflow better. Additionally, it is simpler for a human to follow - this is good for debugging or for accesibility to other developers.
+
+###Debugging
+The basic addition and subtraction methods were extremely simple. The debugger was useful in 
+
