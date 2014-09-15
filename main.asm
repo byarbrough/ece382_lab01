@@ -1,6 +1,20 @@
 ;-------------------------------------------------------------------------------
 ; MSP430 Assembler Code Template for use with TI Code Composer Studio
 ;
+; Name: C2C Brian Yarbrough
+; Section: ECE 382, T5
+; MCU: MSP430G2553
+; Lab 01: A Simple Calculator
+; Description: This program reads byte instructions entered into ROM under the "ops" lable.
+;		Addition is triggered by 0x11
+;		Subtraction is triggered by 0x22
+;		Multiplication is triggered by 0x33
+;		Clearing is triggered by 0x44
+;		End is triggered by 0x55
+;			The numbers are entered as [operand], [instruction], [operand]
+;			ie. 0x16, 0x11, 0xA5 --> 0x16 + 0xA5 = 0xBB (0xBB will be stored in RAM)
+;		
+; Date Due: 16 Sep 14
 ;
 ;-------------------------------------------------------------------------------
             .cdecls C,LIST,"msp430.h"       ; Include device header file
