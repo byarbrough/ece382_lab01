@@ -35,5 +35,11 @@ The code is organized into four segments:
 I likely could have accomplished this project with fewer lines of code or more effeciently processor wise, but considering the resources available on the chip, I chose this method. Although I do use six registers (which is likely more than necesary) I think that my method prevents misinterpretation of numbers and safeguards agains overflow better. Additionally, it is simpler for a human to follow - this is good for debugging or for accesibility to other developers.
 
 ###Debugging
-The basic addition and subtraction methods were extremely simple. The debugger was useful in 
+The basic addition and subtraction methods were extremely simple. The debugger was useful for verifying that things worked as intended, but there were not major issues.
+
+####Multiplication
+I didn't encounter a real problem until I began working with multiplicaiton. At first I considered it neccesary to determine if the number was odd or even so I would know if it was divisible by two. This would allow me to roatate the number a certian number of times (this method is far faster than simply adding in a loop). I accomplished this by popping off the LSB into the carry flag. After looking at some Wikipedia pages on the basics of 3rd grade long multiplication I realized that I didn't need to determine the eveness of the number; I could itteratively rotate through the carry and multiply almost exactly like the base ten method. I verified this with some hand calculations.
+
+Getting this almost working introduced my most signifigant debugging issue. While attempting to detect overflow I realized that I would get 0xFF for things that definitly did not overflow and sometimes the loop would not end when it was supposed to. After extensive dubugging and a candy bar or two, I realized that when the MSB was 1 to begin with it was rotated through the carry out of order with the check. I simply had to rearange the order that some things happened in and it was dandy!
+
 
