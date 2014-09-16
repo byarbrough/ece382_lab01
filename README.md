@@ -4,7 +4,7 @@ ece382_lab01
 Assembly Language - "A Simple Calculator"
 
 ###Objective
-This lab saw the development of a simple calculator which took values from ROM and outputted results into RAM. The calculator was able to add, subtract, multiply, and clear until either the end command was recieved or RAM was filled (there was no prention of the latter; the program would have just crashed).
+This lab saw the development of a simple calculator which took values from ROM and outputted results into RAM. The calculator was able to add, subtract, multiply, and clear until either the end command was received or RAM was filled (there was no prevention of the latter; the program would have just crashed).
 
 ###Preliminary Design
 Originally, I intended to build the program based on the following flowchart:
@@ -13,7 +13,7 @@ _Prelab Flowchart_
 
 ![alt text](https://raw.githubusercontent.com/byarbrough/ece382_lab01/master/FlowChart.jpg "Basic Flowchart")
 
-This design had a couple of flaws. First, I was not consistent in what exactly how I wanted to store things or when I wanted to read from anything. The basic idea was good though: store the first number and the operation instruction and then interpret the insturcion before deciding what to do next. I wanted to take advantage of loops to avoid writting redundant code, so depending on if there was a clear instruciton or not, the loop needed to go back to a differnet point (would the next value from ROM be a number or an instruciton?). After reconsidering these things and clarifying some of the instructions, this is a much more acurate flowchart for basic functionality.
+This design had a couple of flaws. First, I was not consistent in what exactly how I wanted to store things or when I wanted to read from anything. The basic idea was good though: store the first number and the operation instruction and then interpret the instructions before deciding what to do next. I wanted to take advantage of loops to avoid writing redundant code, so depending on if there was a clear instruction or not, the loop needed to go back to a different point (would the next value from ROM be a number or an instruction?). After reconsidering these things and clarifying some of the instructions, this is a much more accurate flowchart for basic functionality.
 
 _Rethought Flowchart_
 *having computer difficulties, standby*
@@ -32,20 +32,20 @@ The code is organized into four segments:
 3. Check for add, subtract, or multiply (and perform appropriate action)
 4. Submethods for storing, clearing, and handling overflow
 
-I likely could have accomplished this project with fewer lines of code or more effeciently processor wise, but considering the resources available on the chip, I chose this method. Although I do use six registers (which is likely more than necesary) I think that my method prevents misinterpretation of numbers and safeguards agains overflow better. Additionally, it is simpler for a human to follow - this is good for debugging or for accesibility to other developers.
+I likely could have accomplished this project with fewer lines of code or more efficiently processor wise, but considering the resources available on the chip, I chose this method. Although I do use six registers (which is likely more than necessary) I think that my method prevents misinterpretation of numbers and safeguards against overflow better. Additionally, it is simpler for a human to follow - this is good for debugging or for accessibility to other developers.
 
 ###Debugging
 The basic addition and subtraction methods were extremely simple. The debugger was useful for verifying that things worked as intended, but there were not major issues.
 
 ####Multiplication
-I didn't encounter a real problem until I began working with multiplicaiton. At first I considered it neccesary to determine if the number was odd or even so I would know if it was divisible by two. This would allow me to roatate the number a certian number of times (this method is far faster than simply adding in a loop). I accomplished this by popping off the LSB into the carry flag. After looking at some Wikipedia pages on the basics of 3rd grade long multiplication I realized that I didn't need to determine the eveness of the number; I could itteratively rotate through the carry and multiply almost exactly like the base ten method. I verified this with some hand calculations.
+I didn't encounter a real problem until I began working with multiplication. At first I considered it necessary to determine if the number was odd or even so I would know if it was divisible by two. This would allow me to rotate the number a certain number of times (this method is far faster than simply adding in a loop). I accomplished this by popping off the LSB into the carry flag. After looking at some Wikipedia pages on the basics of 3rd grade long multiplication I realized that I didn't need to determine the evenness of the number; I could iteratively rotate through the carry and multiply almost exactly like the base ten method. I verified this with some hand calculations.
 
-Getting this almost working introduced my most signifigant debugging issue. While attempting to detect overflow I realized that I would get 0xFF for things that definitly did not overflow and sometimes the loop would not end when it was supposed to. After extensive dubugging and a candy bar or two, I realized that when the MSB was 1 to begin with it was rotated through the carry out of order with the check. I simply had to rearange the order that some things happened in and it was dandy!
+Getting this almost working introduced my most significant debugging issue. While attempting to detect overflow I realized that I would get 0xFF for things that definitely did not overflow and sometimes the loop would not end when it was supposed to. After extensive debugging and a candy bar or two, I realized that when the MSB was 1 to begin with it was rotated through the carry out of order with the check. I simply had to rearrange the order that some things happened in and it was dandy!
 
 ###Testing Methodology
-Having test benches was convinent to know exactly what the instructor was looking for, but honestly they were kind of boring test benches. Most of my testing was done by working out random numbers by hand first to see exactly the bits should be doing. I could then put the same numebrs into ROM and compare the results. This made debugging ncie because I knew exactly what to expect and could almost immediately find out where something went wrong by observing the registers.
+Having test benches was convenient to know exactly what the instructor was looking for, but honestly they were kind of boring test benches. Most of my testing was done by working out random numbers by hand first to see exactly the bits should be doing. I could then put the same numbers into ROM and compare the results. This made debugging nice because I knew exactly what to expect and could almost immediately find out where something went wrong by observing the registers.
 
-In addition to verifying that the calculator could do the numbers it was suposed to, I put in safeguards against overflow and negatives. These were easily testable by inserting absurd numbers and seeing what happened.
+In addition to verifying that the calculator could do the numbers it was supposed to, I put in safeguards against overflow and negatives. These were easily testable by inserting absurd numbers and seeing what happened.
 
 ###Conclusions
 Ultimately, I was very pleased with the performance of this calculator. Part of me (the one that doesn't like sleeping... or weekends) wishes we could have thrown in division as well - I figure it is essentially the opposite of multiplication, but maybe not.
@@ -53,4 +53,4 @@ It was educational to be able to see the functions of a calculator at the assemb
 
 ###Documentation
 Most of this lab was done on my own. C2C Ian Goodbody and I had a brief conversation deciding if the rotation method was indeed O(log(n)) or not. We concluded it was.
-Also, C2C Sabin Park ansered my question that I did not need to worry that registers hold words, but I was only rotating bytes. Just as he said, it all worked out.
+Also, C2C Sabin Park answered my question that I did not need to worry that registers hold words, but I was only rotating bytes. Just as he said, it all worked out.
