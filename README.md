@@ -42,4 +42,15 @@ I didn't encounter a real problem until I began working with multiplicaiton. At 
 
 Getting this almost working introduced my most signifigant debugging issue. While attempting to detect overflow I realized that I would get 0xFF for things that definitly did not overflow and sometimes the loop would not end when it was supposed to. After extensive dubugging and a candy bar or two, I realized that when the MSB was 1 to begin with it was rotated through the carry out of order with the check. I simply had to rearange the order that some things happened in and it was dandy!
 
+###Testing Methodology
+Having test benches was convinent to know exactly what the instructor was looking for, but honestly they were kind of boring test benches. Most of my testing was done by working out random numbers by hand first to see exactly the bits should be doing. I could then put the same numebrs into ROM and compare the results. This made debugging ncie because I knew exactly what to expect and could almost immediately find out where something went wrong by observing the registers.
 
+In addition to verifying that the calculator could do the numbers it was suposed to, I put in safeguards against overflow and negatives. These were easily testable by inserting absurd numbers and seeing what happened.
+
+###Conclusions
+Ultimately, I was very pleased with the performance of this calculator. Part of me (the one that doesn't like sleeping... or weekends) wishes we could have thrown in division as well - I figure it is essentially the opposite of multiplication, but maybe not.
+It was educational to be able to see the functions of a calculator at the assembly level - it makes one realize that the computer has to accomplish a lot more work than a simple "+" makes it seem like. Also, this lab helped me make bounds in my understanding of assembly. Whereas at first I was relying on notes and in-class examples, by the end I was consulting almost exclusively the Family Users Guide.
+
+###Documentation
+Most of this lab was done on my own. C2C Ian Goodbody and I had a brief conversation deciding if the rotation method was indeed O(log(n)) or not. We concluded it was.
+Also, C2C Sabin Park ansered my question that I did not need to worry that registers hold words, but I was only rotating bytes. Just as he said, it all worked out.
